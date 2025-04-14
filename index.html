@@ -82,14 +82,21 @@
     }
 
     .age-box h2 {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       font-size: 1.5rem;
       color: #000;
     }
 
+    .age-box input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      max-width: 250px;
+    }
+
     .age-box button {
       padding: 0.7rem 1.5rem;
-      margin: 0 10px;
       font-size: 1rem;
       cursor: pointer;
       border: none;
@@ -107,9 +114,10 @@
 <body>
   <div id="age-verification">
     <div class="age-box">
-      <h2>Are you of legal drinking age?</h2>
-      <button onclick="verifyAge(true)">Yes</button>
-      <button onclick="verifyAge(false)">No</button>
+      <h2>Please enter your birthdate to continue</h2>
+      <input type="date" id="birthdate" />
+      <br />
+      <button onclick="checkAge()">Enter</button>
     </div>
   </div>
 
@@ -158,11 +166,23 @@
   </footer>
 
   <script>
-    function verifyAge(isOfAge) {
-      if (isOfAge) {
+    function checkAge() {
+      const birthdate = document.getElementById('birthdate').value;
+      if (!birthdate) return alert("Please enter your birthdate.");
+
+      const today = new Date();
+      const dob = new Date(birthdate);
+      const age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+
+      if (age >= 21) {
         document.getElementById('age-verification').style.display = 'none';
       } else {
-        document.getElementById('age-verification').innerHTML = '<h2 style="color:white; text-align:center;">Sorry, you must be of legal drinking age to enter.</h2>';
+        document.getElementById('age-verification').innerHTML = '<h2 style="color:white; text-align:center;">Sorry, you must be 21 or older to enter.</h2>';
       }
     }
   </script>
